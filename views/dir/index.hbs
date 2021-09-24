@@ -1,10 +1,42 @@
 <div class="container text-center my-3">
-    <h1>Confirmar cargas en transporte</h1>
+    <h1><strong>CONFIRMAR CARGAS</strong></h1>
     <br>
-    {{#each data}}
-    <h5>{{name}}</h5>
-    {{/each}}
-
+    <ul class="list-group">
+        {{#if nada}}
+        <h1>No hay usuarios</h1>
+        {{else}}
+        {{#each data}}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <h1>{{name}}</h1>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#{{name}}">
+                Entrar
+            </button>
+            <!-- Modal -->
+            <div class="modal fade" id="{{name}}" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Hola {{name}}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/signin" method="POST">
+                                <div class="form-group">
+                                    <input name="user" type="hidden" value="{{name}}">
+                                    <input name="pass" type="password" class="form-control" placeholder="Contraseña">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Entrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+        {{/each}}
+        {{/if}}
+    </ul>
 </div>
-
 <script src="javascripts/index.js"></script>
