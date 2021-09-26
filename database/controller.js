@@ -1,5 +1,6 @@
 const cxn = require('./connection');
 const queries = require('./queries');
+const jwt = require('jsonwebtoken');
 
 module.exports = {
     async getAllUsers(req, res) {
@@ -24,12 +25,19 @@ module.exports = {
             const pool = await cxn.getConnection();
             let result = await pool.request()
                 .input('name', user)
-                .query(queries.getUser);
+                .query(queries.getUserPass);
             //Devuelve el pass, el usuario siempre es bueno
             //comprobar que coinciden los pass
             //dar token si coincide y tirar hacia empresa
-            //modal de error si no coincide
-            res.json(result.recordset);
+            if (result.recordset[0].pass === pass) {
+                const accessToken = jwt.sign({ user: user }, cxn.accessToken, { expiresIn: '1h' });
+                res.cookie('Authorization', 'Bearer ' + accessToken);
+                res.redirect('/users/empresas')
+            } else {
+                //modal de error si no coincide
+                res.status(500)
+                res.send(error.message)
+            }
         } catch (error) {
             res.status(500)
             res.send(error.message)
