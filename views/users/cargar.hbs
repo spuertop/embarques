@@ -1,0 +1,42 @@
+<div class="container text-center my-3">
+    <h1><strong>Cliente {{data.empresa}}</strong></h1>
+    <div class="form-group row">
+        <label for="albaran" class="col-form-label col-4 text-start">Cargar entrega</label>
+        <div class="col-8">
+            <input type="text" class="form-control" id="albaran" name="albaran" value="{{data.ae}}" disabled>
+        </div>
+        <label for="albaran" class="col-form-label col-4 text-start">Etiqueta</label>
+        <div class="col-8">
+            <input type="text" class="form-control" id="albaran" name="albaran"
+                placeholder="Código de barras del bulto o palet">
+        </div>
+    </div>
+    <br>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"
+            checked>
+        <label class="form-check-label" for="inlineRadio1">Cargar</label>
+    </div>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+        <label class="form-check-label" for="inlineRadio2">Descargar</label>
+    </div>
+    <hr>
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0"
+            aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+    </div>
+    <br>
+    <div id="cargas">
+        <span class="btn-group d-inline" role="group">
+            {{#each data.lecturas}}
+            <input type="checkbox" class="btn-check" id="{{Descripcion2}}" autocomplete="off">
+            <label class="btn btn-outline-secondary btn-lg m-1" for="{{Descripcion2}}">{{Descripcion2}}</label>
+            {{/each}}
+        </span>
+        {{#each data.lecturas}}
+        <button type="button" class="btn btn-danger btn-lg m-1">{{Descripcion2}}</button>
+        {{/each}}
+    </div>
+</div>
+<script src="../javascripts/albaran.js"></script>
