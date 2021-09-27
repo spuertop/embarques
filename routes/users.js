@@ -1,16 +1,14 @@
-var express = require('express');
-var router = express.Router();
+var express = require('express'); //
+const { route } = require('.');
+var router = express.Router(); //
+var con = require('../database/controller');
 
+router.use(con.isAuthenticated);
 
-router.get('/empresas', function(req, res, next) {
-    res.json('respond with a empresas');
-});
+router.get('/empresas', con.getAllEmpresas);
 
-function isAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect('/')
-}
+router.get('/empresa', con.getOneEmpresa);
+
+router.get('/albaran', con.FormAlbaran);
 
 module.exports = router;
