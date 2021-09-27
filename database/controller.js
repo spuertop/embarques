@@ -132,7 +132,6 @@ module.exports = {
         })
     },
 
-    //TODO:
     async getAlbaranData(req, res) {
         let ae = req.query['albaran'];
         let user = req.user;
