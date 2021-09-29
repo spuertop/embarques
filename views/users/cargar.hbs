@@ -12,25 +12,27 @@
         </div>
     </div>
     <br>
-    <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="cargar" value="option1"
-            checked>
-        <label class="form-check-label" for="cargar">Cargar</label>
+
+    <div class="btn-group d-flex" role="group" aria-label="Basic radio toggle button group">
+        <input type="radio"  class="btn-check" name="btnradio" id="cargar" autocomplete="off" checked>
+        <label style="width: 50%;" class="btn btn-outline-primary" for="cargar"><strong>CARGAR</strong></label>
+        <input type="radio" class="btn-check" name="btnradio" id="descargar" autocomplete="off">
+        <label style="width: 50%;" class="btn btn-outline-primary" for="descargar"><strong>DESCARGAR</strong></label>
     </div>
-    <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="descargar" value="option2">
-        <label class="form-check-label" for="descargar">Descargar</label>
-    </div>
+
+
     <hr>
     <div class="progress">
-        <div id="barra" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0"
-            aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+        <div id="barra" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar"
+            aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
     </div>
     <br>
     <div id="cargas">
         {{#each data.lecturas}}
-        <button type="button" id="{{Descripcion1}}" class="btn btn-outline-secondary btn-lg m-1">{{Descripcion2}}</button>
+        <button type="button" id="{{Descripcion1}}"
+            class="btn btn-outline-danger btn-lg m-1 down">{{Descripcion2}}</button>
         {{/each}}
     </div>
+    <div id="toast"></div>
 </div>
 <script src="../javascripts/cargas.js"></script>

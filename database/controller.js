@@ -134,6 +134,9 @@ module.exports = {
 
     async getAlbaranData(req, res) {
         let ae = req.query['albaran'];
+        //Añade espacios al final FIXME: Version dev
+        ae = ae + ' '.repeat(10 - ae.length);
+        console.log(ae);
         let user = req.user;
         let empresa = req.empresa;
         try {
@@ -143,11 +146,15 @@ module.exports = {
                 .input('PLE', ae)
                 .query(queries.getAlbaranData);
             let lecturas = result.recordset;
+            //FIXME: version dev
+            lecturas.forEach(function(item) {
+                item.Descripcion1 = item.Descripcion1.trim();
+            });
             //Sin coincidencias, devolver a /albaran
             if (lecturas.length == 0) {
                 res.redirect('users/albaran');
             } else {
-                res.render('users/cargar', { data: { ae, empresa, lecturas } });
+                res.render('users/cargar', { data: { ae, empresa, user, lecturas } });
             }
         } catch (error) {
             res.status(500)
