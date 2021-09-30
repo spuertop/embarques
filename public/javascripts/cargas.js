@@ -1,10 +1,12 @@
-let albaran, etiqueta, cargar, barra, cantidad, progreso;
+let albaran, etiqueta, cargar, barra, cantidad, progreso, modal;
 
 window.onload = function() {
     albaran = document.getElementById('albaran');
     etiqueta = document.getElementById('etiqueta');
     barra = document.getElementById('barra');
     cantidad = document.getElementById('cargas').querySelectorAll('.btn').length;
+    modal = new bootstrap.Modal(document.getElementById('modal'), {});
+
     progreso = 100 / cantidad;
     //set barra si hay leidos
     etiqueta.focus();
@@ -19,55 +21,48 @@ function searchData(e) {
 }
 
 function cargaUnidad() {
-    let eti = etiqueta.value;
-    let btn = document.getElementById(eti);
+    let btn = document.getElementById(etiqueta.value);
     if (btn) {
-        //Marca 1
-        btn.setAttribute('class', 'btn btn-success btn-lg m-1 up');
-        setbar();
+        //La Unidad de carga ya está cargada
+        if (btn.classList.contains('up')) {
+            let alert = `<div class="alert alert-dismissible alert-warning">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            <strong>Error!</strong> Esto ya estaba cargado.
+                        </div>`;
+            document.getElementById('alert').innerHTML = alert;
+        } else {
+            //Cargamos la unidad
+            btn.setAttribute('class', 'btn btn-success btn-lg m-1 up');
+            document.getElementById('alert').innerHTML = '';
+            setbar();
+        }
     } else {
-        //No encuentra nada que marcar
-        let toast = `
-            <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
-                    <strong class="me-auto">Bootstrap</strong>
-                    <small>11 mins ago</small>
-                    <button type="button" class="btn-close ms-2 mb-1" data-bs-dismiss="toast" aria-label="Close">
-                    <span aria-hidden="true"></span>
-                    </button>
-                </div>
-                <div class="toast-body">
-                    Hello, world! This is a toast message.
-                </div>
-            </div>`
-        document.getElementById('toast').innerHTML = toast;
+        //El bulto a cargar no pertenece al pedido que se está cargando
+        modal.show();
     }
     etiqueta.value = '';
 }
 
 function descargaUnidad() {
-    let eti = etiqueta.value;
-    let btn = document.getElementById(eti);
+    let btn = document.getElementById(etiqueta.value);
     if (btn) {
-        //Desmarca 1
-        btn.setAttribute('class', 'btn btn-outline-light btn-lg m-1 down');
-        setbar();
+        //La UC ya esta descargada
+        if (btn.classList.contains('down')) {
+            let alert = `<div class="alert alert-dismissible alert-warning">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            <strong>Error!</strong> Esto ya estaba descargado.
+                        </div>`;
+            document.getElementById('alert').innerHTML = alert;
+        } else {
+            //Descargamos la UC
+            btn.setAttribute('class', 'btn btn-outline-danger btn-lg m-1 down');
+            document.getElementById('alert').innerHTML = '';
+            setbar();
+        }
+
     } else {
-        //No encuentra nada que desmarcar
-        let toast = `
-            <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
-                    <strong class="me-auto">Bootstrap</strong>
-                    <small>11 mins ago</small>
-                    <button type="button" class="btn-close ms-2 mb-1" data-bs-dismiss="toast" aria-label="Close">
-                    <span aria-hidden="true"></span>
-                    </button>
-                </div>
-                <div class="toast-body">
-                    Hello, world! This is a toast message.
-                </div>
-            </div>`
-        document.getElementById('toast').innerHTML = toast;
+        //El bulto a descargar no pertenece al pedido que se está cargando
+        modal.show();
     }
     etiqueta.value = '';
 }
@@ -76,4 +71,20 @@ function setbar() {
     let up = document.getElementById('cargas').querySelectorAll('.up').length;
     let total = up / cantidad * 100;
     barra.setAttribute('style', 'width: ' + total + '%;');
+    setFinish(total);
+}
+
+function setFinish(total) {
+    if (total === 100) {
+        let check = `    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+        <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
+        <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+        </svg>`;
+        document.getElementById('finish').innerHTML = check;
+        //TODO: add button at footer "Cargar siguiente pedido"
+    } else {
+        document.getElementById('finish').innerHTML = '';
+    }
+
+
 }

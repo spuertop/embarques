@@ -1,0 +1,18 @@
+Imprimir "Etiquetas MDK para transporte REF1" (hay que añadir que salga tambien ref2)
+imprime también el barras de las cargas codificando: AEXXXXN (donde X es numero de albaran y N numero de carga)
+
+Esto también ejecuta un insert con tantas lineas como cargas en PackingDeEntrega
+PJ (campos mínimos obligatorios)
+  insert into PackingList (Empresa, NumeroDePackingList, BloqueadoSN, BloqueadoUnidadesDeCargaSN, TipoDePackinglist, Fecha)
+				   values ('INT'  , 'TEST'             ,           0,                          0,                95, CONVERT(datetime, '2021-09-30 13:05:00.000', 21));
+
+  insert into LineasDePackingList (Empresa, Linea, NumeroDePackingList, TipoDeLinea)
+						   values ('INT', 1, 'TEST', 'A'),('INT', 2, 'TEST', 'A'),('INT', 3, 'TEST', 'A'),('INT', 4, 'TEST', 'A')
+
+CREAR SERIE PLC (Packing list cargas). Numero de packing list = PLC+AE
+En descripcion1 AEXXXN, en descripcion2 1/2, 2/2, etc., en NroDS Cargado o Muelle
+
+Cuando Cargado = 0 Estilo null (estado exp. nada)
+Cuando Cargado > 0 Estilo Parcial (estado exp. en carga)
+Cuando count(cargado) = sum(lineas) Estilo Cargado (estado cargado)
+Cuando Muelle = 0 Estilo todo cargado

@@ -79,7 +79,7 @@ module.exports = {
         jwt.verify(req.cookies.token, cxn.accessToken, function(err, decoded) {
             if (err) res.sendStatus(500);
             if (decoded !== undefined) {
-                console.log(decoded) //{user, ita, exp}
+                //console.log(decoded) //{user, ita, exp}
                 req.user = decoded.user;
                 if (decoded.empresa) req.empresa = decoded.empresa;
                 next();
@@ -88,7 +88,7 @@ module.exports = {
     },
 
     async getAllEmpresas(req, res) {
-        console.log(req.user);
+        //console.log(req.user);
         try {
             const pool = await cxn.getConnection();
             let result = await pool.request().query(queries.getAllEmpresas);
@@ -136,7 +136,6 @@ module.exports = {
         let ae = req.query['albaran'];
         //Añade espacios al final FIXME: Version dev
         ae = ae + ' '.repeat(10 - ae.length);
-        console.log(ae);
         let user = req.user;
         let empresa = req.empresa;
         try {
