@@ -135,6 +135,7 @@ module.exports = {
     async getAlbaranData(req, res) {
         let ae = req.query['albaran'];
         //Añade espacios al final FIXME: Version dev
+        ae = ae.slice(0, 10);
         ae = ae + ' '.repeat(10 - ae.length);
         let user = req.user;
         let empresa = req.empresa;
@@ -148,16 +149,19 @@ module.exports = {
             //FIXME: version dev
             lecturas.forEach(function(item) {
                 item.Descripcion1 = item.Descripcion1.trim();
+                if (item.NroDS == 'Cargado   ') {
+                    item.NroDS = true;
+                }
             });
             //Sin coincidencias, devolver a /albaran
             if (lecturas.length == 0) {
-                res.redirect('users/albaran');
+                res.render('users/albaran', { data: { ae, empresa, user, 'notfound': true } });
             } else {
                 res.render('users/cargar', { data: { ae, empresa, user, lecturas } });
             }
         } catch (error) {
             res.status(500)
-            res.send(error.message)
+            res.send('hahahaha')
         }
     }
 

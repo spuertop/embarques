@@ -12,21 +12,17 @@
         </div>
     </div>
     <br>
-
     <div class="btn-group d-flex" role="group" aria-label="Basic radio toggle button group">
         <input type="radio" class="btn-check" name="btnradio" id="cargar" autocomplete="off" checked>
         <label style="width: 50%;" class="btn btn-outline-primary" for="cargar"><strong>CARGAR</strong></label>
         <input type="radio" class="btn-check" name="btnradio" id="descargar" autocomplete="off">
         <label style="width: 50%;" class="btn btn-outline-primary" for="descargar"><strong>DESCARGAR</strong></label>
     </div>
-
-
     <hr>
     <div class="progress">
         <div id="barra" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar"
             aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
     </div>
-    <br>
     <div id="alert"></div>
 
     <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
@@ -38,17 +34,21 @@
             </div>
         </div>
     </div>
-
+    <div class="d-inline-flex align-items-center" id="finish">
+    </div>
     <div id="cargas">
         {{#each data.lecturas}}
-        <button type="button" id="{{Descripcion1}}"
-            class="btn btn-outline-danger btn-lg m-1 down">{{Descripcion2}}</button>
+        {{#if NroDS}}
+        <button type="button" id="{{Descripcion1}}" class="btn btn-success btn-lg m-1 up">{{Descripcion2}}</button>
+        {{else}}
+        <button type="button" id="{{Descripcion1}}" class="btn btn-outline-danger btn-lg m-1 down">{{Descripcion2}}</button>
+        {{/if}}
         {{/each}}
     </div>
-    <div id="finish"></div>
-    <footer class="footer">
+
+    <footer class="fixed-bottom m-2">
         <div class="d-grid gap-2">
-            <button type="button" class="btn btn-primary">Cargar otro pedido</button>
+            <a href="albaran" class="btn btn-primary" role="button">Cargar otra entrega</a>
         </div>
     </footer>
 
