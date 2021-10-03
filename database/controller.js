@@ -133,35 +133,69 @@ module.exports = {
     },
 
     async getAlbaranData(req, res) {
-        let ae = req.query['albaran'];
-        //Añade espacios al final FIXME: Version dev
-        ae = ae.slice(0, 10);
-        ae = ae + ' '.repeat(10 - ae.length);
         let user = req.user;
         let empresa = req.empresa;
-        try {
-            const pool = await cxn.getConnection();
-            let result = await pool.request()
-                .input('Empresa', empresa)
-                .input('PLE', ae)
-                .query(queries.getAlbaranData);
-            let lecturas = result.recordset;
-            //FIXME: version dev
-            lecturas.forEach(function(item) {
-                item.Descripcion1 = item.Descripcion1.trim();
-                if (item.NroDS == 'Cargado   ') {
-                    item.NroDS = true;
+        let ae = req.query['albaran'];
+        let ud = req.query['ud'];
+        console.log("AE " + ae);
+        console.log("UD " + ud);
+        if (ae) {
+            //Añade espacios al final FIXME: Version dev
+            ae = ae.slice(0, 10);
+            ae = ae + ' '.repeat(10 - ae.length);
+            let user = req.user;
+            let empresa = req.empresa;
+            try {
+                const pool = await cxn.getConnection();
+                let result = await pool.request()
+                    .input('Empresa', empresa)
+                    .input('PLE', ae)
+                    .query(queries.getAlbaranData);
+                let lecturas = result.recordset;
+                //FIXME: version dev
+                lecturas.forEach(function(item) {
+                    item.Descripcion1 = item.Descripcion1.trim();
+                    if (item.NroDS == 'Cargado   ') {
+                        item.NroDS = true;
+                    }
+                });
+                //Sin coincidencias, devolver a /albaran
+                if (lecturas.length == 0) {
+                    res.render('users/albaran', {
+                        data: {
+                            ae,
+                            empresa,
+                            user,
+                            'notfound': true
+                        }
+                    });
+                } else {
+                    res.render('users/cargar', {
+                        data: {
+                            ae,
+                            empresa,
+                            user,
+                            lecturas
+                        }
+                    });
                 }
-            });
-            //Sin coincidencias, devolver a /albaran
-            if (lecturas.length == 0) {
-                res.render('users/albaran', { data: { ae, empresa, user, 'notfound': true } });
-            } else {
-                res.render('users/cargar', { data: { ae, empresa, user, lecturas } });
+            } catch (error) {
+                res.status(500)
+                res.send('hahahaha')
             }
-        } catch (error) {
-            res.status(500)
-            res.send('hahahaha')
+        }
+        if (ud) {
+            ud = ud.slice(0, 10);
+            ud = ud + ' '.repeat(10 - ud.length);
+            try {
+                const pool = await cxn.getConnection();
+                let result = await pool.request()
+                    .input('Descripcion1', ud)
+                    .query(queries.putCargadoOnUd);
+                res.json(result.rowsAffected);
+            } catch (error) {
+
+            }
         }
     }
 

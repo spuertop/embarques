@@ -19,7 +19,7 @@ function searchData(e) {
     }
 }
 
-function cargaUnidad() {
+async function cargaUnidad() {
     let btn = document.getElementById(etiqueta.value);
     if (btn) {
         //La Unidad de carga ya está cargada
@@ -31,9 +31,13 @@ function cargaUnidad() {
             document.getElementById('alert').innerHTML = alert;
         } else {
             //Cargamos la unidad
-            btn.setAttribute('class', 'btn btn-success btn-lg m-1 up');
-            document.getElementById('alert').innerHTML = '';
-            setbar();
+            const res = await fetch('/users/carga?ud=' + etiqueta.value);
+            let results = await res.json();
+            if (results[0] === 1) { //1 row affected
+                btn.setAttribute('class', 'btn btn-success btn-lg m-1 up');
+                document.getElementById('alert').innerHTML = '';
+                setbar();
+            }
         }
     } else {
         //El bulto a cargar no pertenece al pedido que se está cargando
