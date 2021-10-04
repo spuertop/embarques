@@ -137,6 +137,7 @@ module.exports = {
         let empresa = req.empresa;
         let ae = req.query['albaran'];
         let ud = req.query['ud'];
+        let udd = req.query['udd'];
         console.log("AE " + ae);
         console.log("UD " + ud);
         if (ae) {
@@ -197,6 +198,46 @@ module.exports = {
 
             }
         }
-    }
+        if (udd) {
+            udd = udd.slice(0, 10);
+            udd = udd + ' '.repeat(10 - udd.length);
+            try {
+                const pool = await cxn.getConnection();
+                let result = await pool.request()
+                    .input('Descripcion1', udd)
+                    .query(queries.delCargadoOnUd);
+                res.json(result.rowsAffected);
+            } catch (error) {
 
+            }
+        }
+    },
+
+    async setAE(req, res) {
+        let user = req.user;
+        let empresa = req.empresa;
+        let ae = req.query['ae'];
+        let total = req.query['total'];
+        ae = ae.slice(0, 10);
+        ae = ae + ' '.repeat(10 - ae.length);
+        if (total == 100) {
+            total = 'Cargado'
+        } else if (total > 0) {
+            total = 'En carga'
+        } else {
+            total = null
+        }
+        console.log(total);
+        console.log(ae);
+        try {
+            const pool = await cxn.getConnection();
+            let result = await pool.request()
+                .input('Estilo', total)
+                .input('NumeroDePackingList', ae)
+                .query(queries.setEstiloAE);
+            res.json(result.rowsAffected);
+        } catch (error) {
+            console.log(error)
+        }
+    }
 }

@@ -46,7 +46,7 @@ async function cargaUnidad() {
     etiqueta.value = '';
 }
 
-function descargaUnidad() {
+async function descargaUnidad() {
     let btn = document.getElementById(etiqueta.value);
     if (btn) {
         //La UC ya esta descargada
@@ -58,11 +58,14 @@ function descargaUnidad() {
             document.getElementById('alert').innerHTML = alert;
         } else {
             //Descargamos la UC
-            btn.setAttribute('class', 'btn btn-outline-danger btn-lg m-1 down');
-            document.getElementById('alert').innerHTML = '';
-            setbar();
+            const res = await fetch('/users/carga?udd=' + etiqueta.value)
+            let results = await res.json();
+            if (results[0] === 1) { //1 row affected
+                btn.setAttribute('class', 'btn btn-outline-danger btn-lg m-1 down');
+                document.getElementById('alert').innerHTML = '';
+                setbar();
+            }
         }
-
     } else {
         //El bulto a descargar no pertenece al pedido que se está cargando
         modal.show();
@@ -75,6 +78,13 @@ function setbar() {
     let total = up / cantidad * 100;
     barra.setAttribute('style', 'width: ' + total + '%;');
     setFinish(total);
+    setAE(total);
+}
+
+async function setAE(total) {
+    const res = await fetch('/users/setae?total=' + total + '&ae=' + albaran.value);
+    let results = await res.json();
+    console.log(results)
 }
 
 function setFinish(total) {
@@ -85,10 +95,7 @@ function setFinish(total) {
             <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
         </svg>`;
         document.getElementById('finish').innerHTML = check;
-        //TODO: add button at footer "Cargar siguiente pedido"
     } else {
         document.getElementById('finish').innerHTML = '';
     }
-
-
 }
