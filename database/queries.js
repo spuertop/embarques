@@ -1,5 +1,5 @@
 module.exports = {
-    getAllUsers: 'select name from users order by name',
+    getAllUsers: 'select Nombre from Usuarios order by Nombre',
     newUser: 'insert into users (name, email, pass) values (@name, @email, @pass)',
     getUserPass: 'select pass from users where name = @name',
     getAllEmpresas: 'select name from empresas order by name',

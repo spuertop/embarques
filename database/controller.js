@@ -7,7 +7,7 @@ module.exports = {
         let status = req.query['status'];
         status ? status = true : status = false;
         try {
-            const pool = await cxn.getConnection();
+            const pool = await cxn.getUserConn();
             const result = await pool.request().query(queries.getAllUsers);
             let users = result.recordset;
             if (users.length == 0) {
@@ -21,7 +21,8 @@ module.exports = {
                 });
             }
         } catch (error) {
-            res.sentStatus(500)
+            console.log(error)
+            res.sendStatus(500)
         }
     },
 
@@ -31,7 +32,7 @@ module.exports = {
             pass
         } = req.body;
         try {
-            const pool = await cxn.getConnection();
+            const pool = await cxn.getUserConn();
             let result = await pool.request()
                 .input('name', user)
                 .query(queries.getUserPass);
@@ -39,7 +40,7 @@ module.exports = {
                 const accessToken = jwt.sign({
                     user: user
                 }, cxn.accessToken, {
-                    expiresIn: '1h'
+                    expiresIn: '8h'
                 });
                 //res.cookie('Authorization', 'Bearer ' + accessToken);
                 res.cookie('token', accessToken);
