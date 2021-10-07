@@ -31,6 +31,7 @@ module.exports = {
             user,
             pass
         } = req.body;
+        console.log('Body ' + user + ' ' + pass)
         try {
             const pool = await cxn.getUserConn();
             let result = await pool.request()

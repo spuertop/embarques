@@ -14,11 +14,11 @@
         {{#each data}}
         <li class="list-group-item d-flex justify-content-between align-items-center m-1">
             <h1>{{Nombre}}</h1>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#{{name}}">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#{{Usuario}}">
                 Entrar
             </button>
             <!-- Modal -->
-            <div class="modal fade" id="{{Nombre}}" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
+            <div class="modal fade" id="{{Usuario}}" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -28,7 +28,7 @@
                         <div class="modal-body">
                             <form action="/signin" method="POST">
                                 <div class="form-group">
-                                    <input name="user" type="hidden" value="{{name}}">
+                                    <input name="user" type="hidden" value="{{Usuario}}">
                                     <input name="pass" type="password" class="form-control" placeholder="Contraseña">
                                 </div>
                             </form>
