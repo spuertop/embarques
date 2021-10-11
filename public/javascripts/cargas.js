@@ -31,6 +31,7 @@ async function cargaUnidad() {
             document.getElementById('alert').innerHTML = alert;
         } else {
             //Cargamos la unidad
+            console.log("Cargando... " + etiqueta.value)
             const res = await fetch('/users/carga?ud=' + etiqueta.value);
             let results = await res.json();
             if (results[0] === 1) { //1 row affected

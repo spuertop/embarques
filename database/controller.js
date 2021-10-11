@@ -31,13 +31,12 @@ module.exports = {
             user,
             pass
         } = req.body;
-        console.log('Body ' + user + ' ' + pass)
         try {
             const pool = await cxn.getUserConn();
             let result = await pool.request()
                 .input('name', user)
                 .query(queries.getUserPass);
-            if (result.recordset[0].pass === pass) {
+            if (result.recordset[0].Contrasena === pass) {
                 const accessToken = jwt.sign({
                     user: user
                 }, cxn.accessToken, {
@@ -92,7 +91,7 @@ module.exports = {
     async getAllEmpresas(req, res) {
         //console.log(req.user);
         try {
-            const pool = await cxn.getConnection();
+            const pool = await cxn.getUserConn();
             let result = await pool.request().query(queries.getAllEmpresas);
             let empresas = result.recordset;
             if (empresas.length == 0) {
@@ -143,22 +142,16 @@ module.exports = {
         console.log("AE " + ae);
         console.log("UD " + ud);
         if (ae) {
-            //Añade espacios al final FIXME: Version dev
-            ae = ae.slice(0, 10);
-            ae = ae + ' '.repeat(10 - ae.length);
-            let user = req.user;
-            let empresa = req.empresa;
             try {
                 const pool = await cxn.getConnection();
                 let result = await pool.request()
                     .input('Empresa', empresa)
-                    .input('PLE', ae)
+                    .input('PLE', 'PLC' + ae)
                     .query(queries.getAlbaranData);
                 let lecturas = result.recordset;
-                //FIXME: version dev
                 lecturas.forEach(function(item) {
-                    item.Descripcion1 = item.Descripcion1.trim();
-                    if (item.NroDS == 'Cargado   ') {
+                    item.Descripcion = item.Descripcion.trim();
+                    if (item.NroDS == 'Cargado') {
                         item.NroDS = true;
                     }
                 });
@@ -173,6 +166,7 @@ module.exports = {
                         }
                     });
                 } else {
+                    console.log(lecturas)
                     res.render('users/cargar', {
                         data: {
                             ae,
@@ -184,29 +178,27 @@ module.exports = {
                 }
             } catch (error) {
                 res.status(500)
-                res.send('hahahaha')
+                res.send("Linea 01" + error.message)
             }
         }
         if (ud) {
-            ud = ud.slice(0, 10);
-            ud = ud + ' '.repeat(10 - ud.length);
             try {
+                console.log("try");
                 const pool = await cxn.getConnection();
                 let result = await pool.request()
-                    .input('Descripcion1', ud)
+                    .input('Descripcion', ud)
                     .query(queries.putCargadoOnUd);
+                console.log(result)
                 res.json(result.rowsAffected);
             } catch (error) {
 
             }
         }
         if (udd) {
-            udd = udd.slice(0, 10);
-            udd = udd + ' '.repeat(10 - udd.length);
             try {
                 const pool = await cxn.getConnection();
                 let result = await pool.request()
-                    .input('Descripcion1', udd)
+                    .input('Descripcion', udd)
                     .query(queries.delCargadoOnUd);
                 res.json(result.rowsAffected);
             } catch (error) {
@@ -220,23 +212,20 @@ module.exports = {
         let empresa = req.empresa;
         let ae = req.query['ae'];
         let total = req.query['total'];
-        ae = ae.slice(0, 10);
-        ae = ae + ' '.repeat(10 - ae.length);
         if (total == 100) {
-            total = 'Cargado'
+            total = 1 //estilo 1
         } else if (total > 0) {
-            total = 'En carga'
+            total = 2 //estilo 2
         } else {
             total = null
         }
-        console.log(total);
-        console.log(ae);
         try {
             const pool = await cxn.getConnection();
             let result = await pool.request()
                 .input('Estilo', total)
-                .input('NumeroDePackingList', ae)
+                .input('NumeroDePackingList', "PLC" + ae)
                 .query(queries.setEstiloAE);
+            //Actualizar AE
             res.json(result.rowsAffected);
         } catch (error) {
             console.log(error)
