@@ -12,6 +12,10 @@ router.get('/albaran', con.FormAlbaran);
 
 router.get('/carga', con.getAlbaranData);
 
+router.get('/cargar', con.cargar);
+
+router.get('/descargar', con.descargar);
+
 router.get('/setae', con.setAE);
 
 module.exports = router;

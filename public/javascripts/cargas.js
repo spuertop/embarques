@@ -31,8 +31,7 @@ async function cargaUnidad() {
             document.getElementById('alert').innerHTML = alert;
         } else {
             //Cargamos la unidad
-            console.log("Cargando... " + etiqueta.value)
-            const res = await fetch('/users/carga?ud=' + etiqueta.value);
+            const res = await fetch('/users/cargar?ud=' + etiqueta.value + '&ae=' + albaran.value);
             let results = await res.json();
             if (results[0] === 1) { //1 row affected
                 btn.setAttribute('class', 'btn btn-success btn-lg m-1 up');
@@ -59,7 +58,7 @@ async function descargaUnidad() {
             document.getElementById('alert').innerHTML = alert;
         } else {
             //Descargamos la UC
-            const res = await fetch('/users/carga?udd=' + etiqueta.value)
+            const res = await fetch('/users/descargar?udd=' + etiqueta.value + '&ae=' + albaran.value)
             let results = await res.json();
             if (results[0] === 1) { //1 row affected
                 btn.setAttribute('class', 'btn btn-outline-danger btn-lg m-1 down');

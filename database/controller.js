@@ -137,79 +137,93 @@ module.exports = {
         let user = req.user;
         let empresa = req.empresa;
         let ae = req.query['albaran'];
-        let ud = req.query['ud'];
-        let udd = req.query['udd'];
-        console.log("AE " + ae);
-        console.log("UD " + ud);
-        if (ae) {
-            try {
-                const pool = await cxn.getConnection();
-                let result = await pool.request()
-                    .input('Empresa', empresa)
-                    .input('PLE', 'PLC' + ae)
-                    .query(queries.getAlbaranData);
-                let lecturas = result.recordset;
-                lecturas.forEach(function(item) {
-                    item.Descripcion = item.Descripcion.trim();
-                    if (item.NroDS == 'Cargado') {
-                        item.NroDS = true;
+        try {
+            const pool = await cxn.getConnection();
+            let result = await pool.request()
+                .input('Empresa', empresa)
+                .input('PLE', 'PLC' + ae)
+                .query(queries.getAlbaranData);
+            let lecturas = result.recordset;
+            lecturas.forEach(function(item) {
+                item.Descripcion = item.Descripcion.trim();
+                if (item.NroDS == 'Cargado') {
+                    item.NroDS = true;
+                }
+            });
+            let result2 = await pool.request()
+                .input('Empresa', empresa)
+                .input('AE', ae)
+                .query(queries.getAEagencia);
+            let agencia = result2.recordset[0];
+            console.log(agencia);
+            //Sin coincidencias, devolver a /albaran
+            if (lecturas.length == 0) {
+                res.render('users/albaran', {
+                    data: {
+                        ae,
+                        empresa,
+                        user,
+                        'notfound': true
                     }
                 });
-                let result2 = await pool.request()
-                    .input('Empresa', empresa)
-                    .input('AE', ae)
-                    .query(queries.getAEagencia);
-                let agencia = result2.recordset[0];
-                console.log(agencia);
-                //Sin coincidencias, devolver a /albaran
-                if (lecturas.length == 0) {
-                    res.render('users/albaran', {
-                        data: {
-                            ae,
-                            empresa,
-                            user,
-                            'notfound': true
-                        }
-                    });
-                } else {
-                    console.log(lecturas)
-                    res.render('users/cargar', {
-                        data: {
-                            ae,
-                            empresa,
-                            user,
-                            lecturas,
-                            agencia
-                        }
-                    });
-                }
-            } catch (error) {
-                res.status(500)
-                res.send("Linea 01" + error.message)
+            } else {
+                console.log(lecturas)
+                res.render('users/cargar', {
+                    data: {
+                        ae,
+                        empresa,
+                        user,
+                        lecturas,
+                        agencia
+                    }
+                });
             }
+        } catch (error) {
+            res.status(500)
+            res.send("Linea 01" + error.message)
         }
-        if (ud) {
-            try {
-                const pool = await cxn.getConnection();
-                let result = await pool.request()
-                    .input('Descripcion', ud)
-                    .query(queries.putCargadoOnUd);
-                console.log(result)
-                res.json(result.rowsAffected);
-            } catch (error) {
 
-            }
+    },
+
+    async cargar(req, res) {
+        let user = req.user;
+        let empresa = req.empresa;
+        let ae = req.query['ae'];
+        let ud = req.query['ud'];
+        try {
+            const pool = await cxn.getConnection();
+            let result = await pool.request()
+                .input('Descripcion', ud)
+                .query(queries.putCargadoOnUd);
+            await pool.request()
+                .input('PLE', 'PLC' + ae)
+                .input('Empresa', empresa)
+                .input('usuario', user)
+                .query(queries.setControlUsuario2);
+            res.json(result.rowsAffected);
+        } catch (error) {
+            console.log('Fatal error on getAlbaranData if ud ' + error)
         }
-        if (udd) {
-            try {
-                const pool = await cxn.getConnection();
-                let result = await pool.request()
-                    .input('Descripcion', udd)
-                    .query(queries.delCargadoOnUd);
-                res.json(result.rowsAffected);
-            } catch (error) {
+    },
 
-            }
+    async descargar(req, res) {
+        let user = req.user;
+        let empresa = req.empresa;
+        let ae = req.query['ae'];
+        let udd = req.query['udd'];
+        try {
+            const pool = await cxn.getConnection();
+            let result = await pool.request()
+                .input('Descripcion', udd)
+                .query(queries.delCargadoOnUd);
+            await pool.request()
+                .input('PLE', 'PLC' + ae)
+                .input('Empresa', empresa)
+                .input('usuario', user)
+                .query(queries.setControlUsuario2);
+            res.json(result.rowsAffected);
+        } catch (error) {
+            console.log('Fatal error on getAlbaranData if udd ' + error)
         }
     },
 
