@@ -155,6 +155,12 @@ module.exports = {
                         item.NroDS = true;
                     }
                 });
+                let result2 = await pool.request()
+                    .input('Empresa', empresa)
+                    .input('AE', ae)
+                    .query(queries.getAEagencia);
+                let agencia = result2.recordset[0];
+                console.log(agencia);
                 //Sin coincidencias, devolver a /albaran
                 if (lecturas.length == 0) {
                     res.render('users/albaran', {
@@ -172,7 +178,8 @@ module.exports = {
                             ae,
                             empresa,
                             user,
-                            lecturas
+                            lecturas,
+                            agencia
                         }
                     });
                 }
@@ -183,7 +190,6 @@ module.exports = {
         }
         if (ud) {
             try {
-                console.log("try");
                 const pool = await cxn.getConnection();
                 let result = await pool.request()
                     .input('Descripcion', ud)
