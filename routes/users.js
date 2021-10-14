@@ -18,4 +18,6 @@ router.get('/descargar', con.descargar);
 
 router.get('/setae', con.setAE);
 
+router.get('/salir', con.logout)
+
 module.exports = router;

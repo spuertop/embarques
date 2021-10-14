@@ -78,7 +78,7 @@ module.exports = {
     //Protected routes
     isAuthenticated(req, res, next) {
         jwt.verify(req.cookies.token, cxn.accessToken, function(err, decoded) {
-            if (err) res.sendStatus(500);
+            if (err) res.redirect('/');
             if (decoded !== undefined) {
                 //console.log(decoded) //{user, ita, exp}
                 req.user = decoded.user;
@@ -233,9 +233,9 @@ module.exports = {
         let ae = req.query['ae'];
         let total = req.query['total'];
         if (total == 100) {
-            total = 1 //estilo 1
+            total = 75 //estilo cargado
         } else if (total > 0) {
-            total = 2 //estilo 2
+            total = 74 //parcialmente cargado
         } else {
             total = null
         }
@@ -250,5 +250,10 @@ module.exports = {
         } catch (error) {
             console.log(error)
         }
+    },
+
+    async logout(req, res) {
+        res.cookie('token', '');
+        res.redirect('/');
     }
 }
