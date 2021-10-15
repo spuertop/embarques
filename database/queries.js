@@ -10,5 +10,6 @@ module.exports = {
     setEstiloAE: `update APPIA_SQL.dbo.PackingList set Estilo = @Estilo where NumeroDePackingList = @NumeroDePackingList`,
     selAgencias: 'select distinct(CodigoDeServicioDeTransporte) from Appia_Sql.dbo.AlbaranesDeEntrega where Empresa = @Empresa',
     getAEagencia: 'select CodigoDeServicioDeTransporte from Appia_Sql.dbo.AlbaranesDeEntrega where Empresa = @Empresa and NumeroDeAlbaran = @ae',
-    selPL: `select top 1 NumeroDePackingList FROM APPIA_SQL.dbo.LineasDePackingList where Descripcion = @Descripcion`
+    selPL: `select top 1 NumeroDePackingList FROM APPIA_SQL.dbo.LineasDePackingList where Descripcion = @Descripcion`,
+    setCodigoEstadoAE: `update APPIA_SQL.dbo.AlbaranesDeEntrega set EstadoDeServicio = @Estado where Empresa = @Empresa and NumeroDeAlbaran = @NumeroDeAlbaran`
 }

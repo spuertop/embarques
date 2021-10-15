@@ -246,6 +246,11 @@ module.exports = {
                 .input('NumeroDePackingList', "PLC" + ae)
                 .query(queries.setEstiloAE);
             //Actualizar AE
+            await pool.request()
+                .input('Estado', total == 75 ? "CARGADO" : null)
+                .input('NumeroDeAlbaran', ae)
+                .input('Empresa', empresa)
+                .query(queries.setCodigoEstadoAE)
             res.json(result.rowsAffected);
         } catch (error) {
             console.log(error)
