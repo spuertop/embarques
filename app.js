@@ -14,7 +14,7 @@ var usersRouter = require('./routes/users');
 app.set('port', 4000);
 
 //View engine
-//app.set('views', path.join(__dirname, '/views'));
+app.set('views', path.join(__dirname, '/views'));
 app.engine('.hbs', exphbs({ defaultLayout: 'layout', extname: '.hbs', helpers: require('./views/helpers') }));
 app.set('view engine', '.hbs');
 
