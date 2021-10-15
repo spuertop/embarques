@@ -11,7 +11,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 //Settings
-app.set('port', process.env.PORT || 3000);
+app.set('port', 4000);
 
 //View engine
 //app.set('views', path.join(__dirname, '/views'));
