@@ -1,5 +1,5 @@
 module.exports = {
-    getAllUsers: `select Nombre, Usuario from APPIA_INFO.dbo.Usuarios where Usuario like 'RF%' order by Nombre`,
+    getAllUsers: `select Nombre, Usuario from APPIA_INFO.dbo.Usuarios where Usuario like 'RF%' or Usuario like 'RES%' order by Nombre`,
     //newUser: 'insert into users (name, email, pass) values (@name, @email, @pass)',
     getUserPass: 'select Contrasena from APPIA_INFO.dbo.Usuarios where Usuario = @name',
     getAllEmpresas: 'select Empresa from APPIA_INFO.dbo.Empresas where Estilo = 18 order by Empresa',

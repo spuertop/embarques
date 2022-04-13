@@ -2,17 +2,16 @@
     <h1><strong>Cliente {{data.empresa}}</strong></h1>
     {{!-- Formulario con info Albaran, agencia, etiqueta --}}
     <div class="form-group row">
-        <label for="albaran" class="col-form-label col-4 text-start">Cargar entrega</label>
+        <label for="albaran" class="col-form-label col-4 text-start">ALBARÁN</label>
         <div class="col-8">
-            <input style="color: black;" type="text" class="form-control" id="albaran" name="albaran"
-                value="{{data.ae}}" disabled>
+            <input style="color: black;" type="text" class="form-control" id="albaran" name="albaran" value="{{data.ae}}" disabled>
         </div>
-        <label for="agencia" class="col-form-label col-4 text-start">Transporte</label>
+        <label for="agencia" class="col-form-label col-4 text-start">AGENCIA</label>
         <div class="col-8">
             <input style="color: black;" type="text" class="form-control" id="agencia" name="agencia"
                 value="{{data.agencia.CodigoDeServicioDeTransporte}}" disabled>
         </div>
-        <label for="albaran" class="col-form-label col-4 text-start">Etiqueta</label>
+        <label for="albaran" class="col-form-label col-4 text-start">COD.BARRAS</label>
         <div class="col-8">
             <input type="text" class="form-control" id="etiqueta" name="etiqueta"
                 placeholder="Código de barras del bulto o palet">
